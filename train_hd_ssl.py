@@ -3,6 +3,7 @@ import evaluation_func
 import numpy as np
 import os
 import torch
+from paths import RAW_DATA_AND_LABELS_DIR, PROCESSED_DATA_DIR, OUTPUT_DIR
 from sklearn import metrics
 from scipy.special import softmax
 import seaborn as sns
@@ -94,14 +95,10 @@ args = parser.parse_args()
 
 
 VISUALIZE_ACC_VS_PRED_WIN = False
-RAW_DATA_AND_LABELS_DIR = '/home/dafnas1/datasets/hd_dataset/lab_geneactive/synced_labeled_data_walking_non_walking'
-#RAW_DATA_AND_LABELS_DIR = '/mlwell-data2/dafna/daily_living_data_array/HC'
-#RAW_DATA_AND_LABELS_DIR = '/mlwell-data2/dafna/PD_data_and_labels/Data'
-#PD_RAW_LABELS_DIR = '/mlwell-data2/dafna/PD_data_and_labels/labels'
-#RAW_DATA_AND_LABELS_DIR = '/mlwell-data2/dafna/daily_living_data_array/PACE'
-PROCESSED_DATA_DIR ='/mlwell-data2/dafna/daily_living_data_array/data_ready'
-OUTPUT_DIR = '/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs'
-VIZUALIZE_DIR = '/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/results_visualization/multiclass_hd_only/multiclass_separated_labels'
+VIZUALIZE_DIR = os.path.join(
+    OUTPUT_DIR,
+    'results_visualization/multiclass_hd_only/multiclass_separated_labels'
+)
 if args.cohort == 'pd_owly':
     SRC_SAMPLE_RATE = int(25) #hz
 else:
@@ -398,7 +395,7 @@ def main():
         #FILE_PREFIX = 'classification_test' #segmentation_val' or'segmentation_without_edges_overlap' or 'segmentation_triple_wind_no_shift'
         
         gait_only_prefix = "_gait_only" if args.gait_only else ""
-        OUTPUT_DIR = '/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/output_files'
+        OUTPUT_DIR = os.path.join(OUTPUT_DIR, 'output_files')
         #UTPUT_DIR = '/mlwell-data2/dafna/ssl_gait_detection/model_outputs/output_files'
 
         
@@ -406,75 +403,119 @@ def main():
         ## for in lab
         if args.data_type == 'in_lab':
             if args.cohort == 'hd':
-                input_data_dir = '/home/dafnas1/my_repo/hd_gait_detection_with_SSL/data_ready' # /mlwell-data2/dafna/in_lab_data_array or /home/dafnas1/my_repo/hd_gait_detection_with_SSL/data_ready
+                input_data_dir = PROCESSED_DATA_DIR  # in-lab HD data
                 INP_PREFIX = 'segmentation_triple_wind_no_shift' #or 'check_labels'
                 #segmentation_labels' or'segmentation_without_edges_overlap' or 'segmentation_triple_wind_no_shift' or 'classification_test' or 'daily_living_classification_full_files' or 'classification_hc'
                 #as in the output file of preditions
                 OUT_PREFIX = 'segmentation_triple_wind_no_shift_final_8_4_24' #'classification_test_final' or 'segmentation_triple_wind_no_shift_final_8_4_24'
             if args.cohort == 'hc':
-                input_data_dir = '/home/dafnas1/my_repo/hd_gait_detection_with_SSL/data_ready' # or /mlwell-data2/dafna/in_lab_data_array
+                input_data_dir = PROCESSED_DATA_DIR
                 INP_PREFIX = 'classification_hc'
                 #as in the output file of preditions
                 OUT_PREFIX = 'classification_7_4_24_chorea_0_only_gait_only_hc' 
             if args.cohort == 'pd_owly' and args.model_type=='classification':
-                input_data_dir = '/mlwell-data2/dafna/daily_living_data_array/data_ready'
+                input_data_dir = PROCESSED_DATA_DIR
                 INP_PREFIX = 'classification_with_std_rm'
                 OUT_PREFIX = 'classification_with_std_rm_with_fine_tuning'
-            if args.cohort == 'pd_owly' and args.model_type=='segmentation': 
-                input_data_dir = '/mlwell-data2/dafna/daily_living_data_array/data_ready'
+            if args.cohort == 'pd_owly' and args.model_type=='segmentation':
+                input_data_dir = PROCESSED_DATA_DIR
                 INP_PREFIX = 'segmentation_triple_wind_with_std_rm'
                 OUT_PREFIX = 'segmentation_triple_wind_with_std_rm_with_fine_tuning'
             if args.model_type == 'vanila':
-                EXTERNAL_MODEL_FILE = '/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/output_files/multiclass_weights_hc_only_boosting_classification_7_4_24_chorea_0_only_gait_only.pt'
+                EXTERNAL_MODEL_FILE = os.path.join(
+                    OUTPUT_DIR,
+                    'output_files',
+                    'multiclass_weights_hc_only_boosting_classification_7_4_24_chorea_0_only_gait_only.pt'
+                )
             else:
                 EXTERNAL_MODEL_FILE = None
         ## for daily living
         if args.data_type == 'daily_living':
-            input_data_dir = '/mlwell-data2/dafna/daily_living_data_array/data_ready'
+            input_data_dir = PROCESSED_DATA_DIR
             if args.dataset_hd == 'iwear':
                 if args.cohort == 'hc' and args.model_type=='segmentation':
                     INP_PREFIX = 'daily_living_segmentation_triple_wind_full_files_no_std'
                     OUT_PREFIX = 'daily_living_seg_triple_wind_no_std'
-                    EXTERNAL_MODEL_FILE = '/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/output_files/multiclass_weights_hc_only_boosting_segmentation_triple_wind_hc_7_4_24_chorea_0_only_gait_only.pt'
+                    EXTERNAL_MODEL_FILE = os.path.join(
+                        OUTPUT_DIR,
+                        'output_files',
+                        'multiclass_weights_hc_only_boosting_segmentation_triple_wind_hc_7_4_24_chorea_0_only_gait_only.pt'
+                    )
                 if args.cohort == 'hc' and args.model_type=='classification':
                     INP_PREFIX = 'daily_living_classification_full_files_no_std'
                     OUT_PREFIX = 'daily_living_classification_no_std'
-                    EXTERNAL_MODEL_FILE = '/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/output_files/multiclass_weights_hc_only_boosting_classification_7_4_24_chorea_0_only_gait_only.pt'
+                    EXTERNAL_MODEL_FILE = os.path.join(
+                        OUTPUT_DIR,
+                        'output_files',
+                        'multiclass_weights_hc_only_boosting_classification_7_4_24_chorea_0_only_gait_only.pt'
+                    )
             if args.cohort == 'hd' and args.model_type=='segmentation': 
                 if args.dataset_hd == 'iwear':
                     INP_PREFIX = 'daily_living_segmentation_triple_wind_full_files_no_std'
                     OUT_PREFIX = 'daily_living_seg_triple_wind_no_std'
-                    EXTERNAL_MODEL_FILE = '/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/output_files/multiclass_weights_hd_only_boosting_segmentation_triple_wind_no_shift_final_8_4_24_gait_only.pt'
+                    EXTERNAL_MODEL_FILE = os.path.join(
+                        OUTPUT_DIR,
+                        'output_files',
+                        'multiclass_weights_hd_only_boosting_segmentation_triple_wind_no_shift_final_8_4_24_gait_only.pt'
+                    )
                 elif args.dataset_hd == 'pace':
                     INP_PREFIX = 'segmentation_triple_wind_pace'
                     OUT_PREFIX = 'segmentation_triple_wind_daily_pace'
-                    EXTERNAL_MODEL_FILE = '/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/output_files/multiclass_weights_hd_only_boosting_segmentation_triple_wind_no_shift_final_8_4_24_gait_only.pt'
+                    EXTERNAL_MODEL_FILE = os.path.join(
+                        OUTPUT_DIR,
+                        'output_files',
+                        'multiclass_weights_hd_only_boosting_segmentation_triple_wind_no_shift_final_8_4_24_gait_only.pt'
+                    )
             if args.cohort == 'hd' and args.model_type=='classification': 
                 if args.dataset_hd == 'iwear':
                     INP_PREFIX = 'daily_living_classification_full_files_no_std'
                     OUT_PREFIX = 'daily_living_classification_no_std'
-                    EXTERNAL_MODEL_FILE = '/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/output_files/multiclass_weights_hd_only_boosting_classification_test_final_gait_only.pt'
+                    EXTERNAL_MODEL_FILE = os.path.join(
+                        OUTPUT_DIR,
+                        'output_files',
+                        'multiclass_weights_hd_only_boosting_classification_test_final_gait_only.pt'
+                    )
                 elif args.dataset_hd== 'pace':
                     INP_PREFIX = 'classification_daily_pace'
                     OUT_PREFIX = 'classification_daily_pace'
-                    EXTERNAL_MODEL_FILE = '/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/output_files/multiclass_weights_hd_only_boosting_classification_test_final_gait_only.pt'
+                    EXTERNAL_MODEL_FILE = os.path.join(
+                        OUTPUT_DIR,
+                        'output_files',
+                        'multiclass_weights_hd_only_boosting_classification_test_final_gait_only.pt'
+                    )
             if args.cohort == 'pd_owly' and args.model_type=='segmentation': 
                 INP_PREFIX = 'segmentation_triple_wind_with_std_rm'
                 OUT_PREFIX = 'segmentation_triple_wind_with_std_rm'
-                EXTERNAL_MODEL_FILE = '/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/output_files/multiclass_weights_hd_only_boosting_segmentation_triple_wind_no_shift_final_8_4_24_gait_only.pt'
+                EXTERNAL_MODEL_FILE = os.path.join(
+                    OUTPUT_DIR,
+                    'output_files',
+                    'multiclass_weights_hd_only_boosting_segmentation_triple_wind_no_shift_final_8_4_24_gait_only.pt'
+                )
             if args.cohort == 'pd_owly' and args.model_type=='classification':
                 INP_PREFIX = 'classification_with_std_rm'
                 OUT_PREFIX = 'classification_with_std_rm'
-                EXTERNAL_MODEL_FILE = '/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/output_files/multiclass_weights_hd_only_boosting_classification_test_final_gait_only.pt' 
+                EXTERNAL_MODEL_FILE = os.path.join(
+                    OUTPUT_DIR,
+                    'output_files',
+                    'multiclass_weights_hd_only_boosting_classification_test_final_gait_only.pt'
+                )
             if args.cohort == 'hd' and args.model_type=='vanila':
                 # test the hc model on hd data
-                input_data_dir = '/home/dafnas1/my_repo/hd_gait_detection_with_SSL/data_ready'
+                input_data_dir = PROCESSED_DATA_DIR
                 INP_PREFIX = 'classification_test' 
                 OUT_PREFIX = 'vanila_hc_model_on_hd' 
-                EXTERNAL_MODEL_FILE = '/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/output_files/multiclass_weights_hc_only_boosting_classification_7_4_24_chorea_0_only_gait_only.pt'
+                EXTERNAL_MODEL_FILE = os.path.join(
+                    OUTPUT_DIR,
+                    'output_files',
+                    'multiclass_weights_hc_only_boosting_classification_7_4_24_chorea_0_only_gait_only.pt'
+                )
                 
 
-        VIZUALIZE_DIR = f'/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/results_visualization/boosting/{OUT_PREFIX}'+gait_only_prefix+'_'+ args.cohort
+        VIZUALIZE_DIR = os.path.join(
+            OUTPUT_DIR,
+            'results_visualization/boosting',
+            f'{OUT_PREFIX}'+gait_only_prefix+'_'+args.cohort
+        )
         n_estimators = 0
         learning_rate = 0.5
 
@@ -608,13 +649,15 @@ def main():
             valid_chorea_all_folds = np.concatenate(valid_chorea_all_folds)
 
             if True:
-            evaluation_func.generate_confusion_matrix_per_chorea_lvl(gait_predictions_all_folds, 
-                                                    gait_labels_all_folds, 
-                                                    chorea_predictions_all_folds, 
-                                                    chorea_labels_all_folds, 
-                                                    valid_chorea_all_folds, 
-                                                    valid_gait_all_folds,
-                                                    fold_index='all')
+                evaluation_func.generate_confusion_matrix_per_chorea_lvl(
+                    gait_predictions_all_folds,
+                    gait_labels_all_folds,
+                    chorea_predictions_all_folds,
+                    chorea_labels_all_folds,
+                    valid_chorea_all_folds,
+                    valid_gait_all_folds,
+                    fold_index='all'
+                )
         
 
             np.savez(os.path.join(OUTPUT_DIR, f'multiclass_separated_labels_predictions_and_logits_with_true_labels_and_subjects_{COHORT}_only_boosting_{OUT_PREFIX}'+gait_only_prefix+'.npz'),
@@ -666,10 +709,15 @@ def main():
                 false_class_video_time = win_video_time[mismatch_indices]
                 false_class_subject = win_subjects[0][mismatch_indices]
                 
-                np.savez('/home/dafnas1/my_repo/hd_gait_detection_with_SSL/false_gait_classification_video_start_time_andsubjects.npz',
-                false_class_video_time=false_class_video_time,false_class_subject=false_class_subject)
+                np.savez(
+                    os.path.join(OUTPUT_DIR, 'false_gait_classification_video_start_time_andsubjects.npz'),
+                    false_class_video_time=false_class_video_time,
+                    false_class_subject=false_class_subject
+                )
             #### compare classification and seg windows DEBUGG#####
-            class_false_gait = dict(np.load('/home/dafnas1/my_repo/hd_gait_detection_with_SSL/false_gait_classification_video_start_time_andsubjects.npz'))
+            class_false_gait = dict(
+                np.load(os.path.join(OUTPUT_DIR, 'false_gait_classification_video_start_time_andsubjects.npz'))
+            )
             class_false_gait_video = class_false_gait['false_class_video_time'].flatten()
             class_false_gait_subject = class_false_gait['false_class_subject'].flatten()
             for video, subject in zip(class_false_gait_video, class_false_gait_subject):
@@ -720,7 +768,7 @@ def main():
                                                 chorea_labels=chorea_labels_all_folds[0],
                                                 analysis_type='per_pixel')
             
-            scores_file = os.path.join('/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs','scores.json')
+            scores_file = os.path.join(OUTPUT_DIR, 'scores.json')
 
             # New model configuration name
             new_config_name = OUT_PREFIX+gait_only_prefix+'_'+COHORT

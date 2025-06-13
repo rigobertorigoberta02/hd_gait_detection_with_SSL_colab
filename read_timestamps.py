@@ -2,9 +2,10 @@ import os
 import pandas as pd
 from datetime import datetime
 import ipdb
+from paths import PROCESSED_DATA_DIR
 
 # Directory containing the CSV files
-directory = '/mlwell-data2/dafna/PACEHD_for_ssl_paper'
+directory = os.path.join(PROCESSED_DATA_DIR, 'PACEHD_for_ssl_paper')
 
 # Output text file
 output_file = 'PACE_start_times.txt'

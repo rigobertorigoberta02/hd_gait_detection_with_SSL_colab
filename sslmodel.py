@@ -124,6 +124,8 @@ class NormalDataset(Dataset):
         return sample, y, pid
 
 
+from paths import CHECKPOINT_PATH
+
 class EarlyStopping:
     """Early stops the training if validation loss
     doesn't improve after a given patience."""
@@ -133,7 +135,7 @@ class EarlyStopping:
             patience=15,
             verbose=False,
             delta=0,
-            path="/mlwell-data2/dafna/ssl_gait_detection/model_outputs/checkpoints/checkpoint.pt",#"checkpoint.pt",
+            path=CHECKPOINT_PATH,  # "checkpoint.pt",
             trace_func=print,
     ):
         """

@@ -1,28 +1,31 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import auc
+import os
+from paths import OUTPUT_DIR
 
 # Load data for model 1
-precision_classification_ft = np.load('/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/final_graphs/pd_curves/precision_classification_with_std_rm_with_fine_tuning.npy')
-recall_classification_ft = np.load('/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/final_graphs/pd_curves/recall_classification_with_std_rm_with_fine_tuning.npy')
-fpr_classification_ft = np.load('/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/final_graphs/pd_curves/fpr_classification_with_std_rm_with_fine_tuning.npy')
-tpr_classification_ft = np.load('/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/final_graphs/pd_curves/tpr_classification_with_std_rm_with_fine_tuning.npy')
+curves_dir = os.path.join(OUTPUT_DIR, 'final_graphs/pd_curves')
+precision_classification_ft = np.load(os.path.join(curves_dir, 'precision_classification_with_std_rm_with_fine_tuning.npy'))
+recall_classification_ft = np.load(os.path.join(curves_dir, 'recall_classification_with_std_rm_with_fine_tuning.npy'))
+fpr_classification_ft = np.load(os.path.join(curves_dir, 'fpr_classification_with_std_rm_with_fine_tuning.npy'))
+tpr_classification_ft = np.load(os.path.join(curves_dir, 'tpr_classification_with_std_rm_with_fine_tuning.npy'))
 
-precision_classification_no_ft = np.load('/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/final_graphs/pd_curves/precision_classification_with_std_rm.npy')
-recall_classification_no_ft = np.load('/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/final_graphs/pd_curves/recall_classification_with_std_rm.npy')
-fpr_classification_no_ft = np.load('/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/final_graphs/pd_curves/fpr_classification_with_std_rm.npy')
-tpr_classification_no_ft = np.load('/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/final_graphs/pd_curves/tpr_classification_with_std_rm.npy')
+precision_classification_no_ft = np.load(os.path.join(curves_dir, 'precision_classification_with_std_rm.npy'))
+recall_classification_no_ft = np.load(os.path.join(curves_dir, 'recall_classification_with_std_rm.npy'))
+fpr_classification_no_ft = np.load(os.path.join(curves_dir, 'fpr_classification_with_std_rm.npy'))
+tpr_classification_no_ft = np.load(os.path.join(curves_dir, 'tpr_classification_with_std_rm.npy'))
 
 # Load data for model 2
-precision_segmentation_ft = np.load('/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/final_graphs/pd_curves/precision_segmentation_triple_wind_with_std_rm_with_fine_tuning.npy')
-recall_segmentation_ft = np.load('/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/final_graphs/pd_curves/recall_segmentation_triple_wind_with_std_rm_with_fine_tuning.npy')
-fpr_segmentation_ft = np.load('/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/final_graphs/pd_curves/fpr_segmentation_triple_wind_with_std_rm_with_fine_tuning.npy')
-tpr_segmentation_ft = np.load('/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/final_graphs/pd_curves/tpr_segmentation_triple_wind_with_std_rm_with_fine_tuning.npy')
+precision_segmentation_ft = np.load(os.path.join(curves_dir, 'precision_segmentation_triple_wind_with_std_rm_with_fine_tuning.npy'))
+recall_segmentation_ft = np.load(os.path.join(curves_dir, 'recall_segmentation_triple_wind_with_std_rm_with_fine_tuning.npy'))
+fpr_segmentation_ft = np.load(os.path.join(curves_dir, 'fpr_segmentation_triple_wind_with_std_rm_with_fine_tuning.npy'))
+tpr_segmentation_ft = np.load(os.path.join(curves_dir, 'tpr_segmentation_triple_wind_with_std_rm_with_fine_tuning.npy'))
 
-precision_segmentation_no_ft = np.load('/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/final_graphs/pd_curves/precision_segmentation_triple_wind_with_std_rm.npy')
-recall_segmentation_no_ft = np.load('/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/final_graphs/pd_curves/recall_segmentation_triple_wind_with_std_rm.npy')
-fpr_segmentation_no_ft = np.load('/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/final_graphs/pd_curves/fpr_segmentation_triple_wind_with_std_rm.npy')
-tpr_segmentation_no_ft = np.load('/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/final_graphs/pd_curves/tpr_segmentation_triple_wind_with_std_rm.npy')
+precision_segmentation_no_ft = np.load(os.path.join(curves_dir, 'precision_segmentation_triple_wind_with_std_rm.npy'))
+recall_segmentation_no_ft = np.load(os.path.join(curves_dir, 'recall_segmentation_triple_wind_with_std_rm.npy'))
+fpr_segmentation_no_ft = np.load(os.path.join(curves_dir, 'fpr_segmentation_triple_wind_with_std_rm.npy'))
+tpr_segmentation_no_ft = np.load(os.path.join(curves_dir, 'tpr_segmentation_triple_wind_with_std_rm.npy'))
 
 # Calculate AUC for Precision-Recall curves
 auc_pr_classification_ft = auc(recall_classification_ft, precision_classification_ft)

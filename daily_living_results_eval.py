@@ -1,8 +1,8 @@
 import ssl_boosting
 import numpy as np
 import os
-import os
 from datetime import datetime, timedelta
+from paths import OUTPUT_DIR, PROCESSED_DATA_DIR
 import ipdb
 import matplotlib.pyplot as plt
 import plotly.express as px
@@ -52,11 +52,18 @@ def main(COHORT = 'hc', model_type = 'segmentation', dataset_hd = 'pace'):
 
     GAIT_ONLY = True
     gait_only_prefix = "_gait_only" if GAIT_ONLY else ""
-    OUTPUT_DIR = '/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/output_files'
-    PLOT_OUTPUT_DIR = f'/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/results_visualization/boosting/{OUT_PREFIX}_per_day_{model_type}_{COHORT}'
+    PLOT_OUTPUT_DIR = os.path.join(
+        OUTPUT_DIR,
+        f'results_visualization/boosting/{OUT_PREFIX}_per_day_{model_type}_{COHORT}'
+    )
     if not os.path.exists(PLOT_OUTPUT_DIR):
         os.makedirs(PLOT_OUTPUT_DIR)
-    input_file = np.load(f'/mlwell-data2/dafna/daily_living_data_array/data_ready/windows_input_to_multiclass_model_{COHORT}_only_{INP_PREFIX}.npz')
+    input_file = np.load(
+        os.path.join(
+            PROCESSED_DATA_DIR,
+            f'windows_input_to_multiclass_model_{COHORT}_only_{INP_PREFIX}.npz'
+        )
+    )
     output_file = np.load(os.path.join(OUTPUT_DIR, f'multiclass_separated_labels_predictions_and_logits_with_true_labels_and_subjects_{COHORT}_only_boosting_{OUT_PREFIX}'+gait_only_prefix+'.npz'),allow_pickle=True)
 
 
@@ -109,10 +116,12 @@ def main(COHORT = 'hc', model_type = 'segmentation', dataset_hd = 'pace'):
     gait_predictions_logits_all_folds = output_file['gait_predictions_logits_all_folds']
 
     patient_times = {}
+    base_dir = os.path.dirname(__file__)
     if dataset_hd == 'pace':
-        time_until_end = calculate_seconds_until_end_of_day(f'/home/dafnas1/my_repo/hd_gait_detection_with_SSL/{dataset_hd.upper()}_start_times.txt') 
+        start_file = os.path.join(base_dir, f'{dataset_hd.upper()}_start_times.txt')
     else:
-        time_until_end = calculate_seconds_until_end_of_day(f'/home/dafnas1/my_repo/hd_gait_detection_with_SSL/{COHORT.upper()}_start_times.txt')
+        start_file = os.path.join(base_dir, f'{COHORT.upper()}_start_times.txt')
+    time_until_end = calculate_seconds_until_end_of_day(start_file)
     # with open('/home/dafnas1/my_repo/hd_gait_detection_with_SSL/start_times.txt', 'r') as file:
     #     lines = file.readlines()
     walking_precent = open(os.path.join(PLOT_OUTPUT_DIR, 'walking_precent.csv'), 'w')

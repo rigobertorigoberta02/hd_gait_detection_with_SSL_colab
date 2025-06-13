@@ -31,6 +31,22 @@ You can run the training process using:
 ```bash
 python train_hd_ssl.py --initialize-model --training-mode --run-suffix "experiment_name"
 ```
+
+### Customizing Data Paths
+Default directories for raw data, processed data, model outputs and checkpoints
+are defined in `paths.py`. These values point to `/content/...` so the code runs
+out of the box in Google Colab. To override any of the locations on your local
+machine, either edit `paths.py` or set the environment variables
+`RAW_DATA_AND_LABELS_DIR`, `PROCESSED_DATA_DIR`, `OUTPUT_DIR` and
+`CHECKPOINT_PATH` before running the scripts:
+
+```bash
+export RAW_DATA_AND_LABELS_DIR=/path/to/raw
+export PROCESSED_DATA_DIR=/path/to/processed
+export OUTPUT_DIR=/path/to/outputs
+export CHECKPOINT_PATH=/path/to/checkpoint.pt
+python train_hd_ssl.py
+```
 Data is available in:
 https://zenodo.org/records/14384260
 

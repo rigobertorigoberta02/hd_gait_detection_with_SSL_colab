@@ -1,7 +1,8 @@
 import preprocessing
 import numpy as np
 import os
-from models_new import GaitDetectorSSL,GaitChoreaDetectorSSL
+from models_new import GaitDetectorSSL, GaitChoreaDetectorSSL
+from paths import RAW_DATA_AND_LABELS_DIR, PROCESSED_DATA_DIR, OUTPUT_DIR
 import torch
 from sklearn import metrics
 from scipy.special import softmax
@@ -80,14 +81,10 @@ args = parser.parse_args()
 
 
 VISUALIZE_ACC_VS_PRED_WIN = False
-RAW_DATA_AND_LABELS_DIR = '/home/dafnas1/datasets/hd_dataset/lab_geneactive/synced_labeled_data_walking_non_walking'
-#RAW_DATA_AND_LABELS_DIR = '/mlwell-data2/dafna/daily_living_data_array/HC'
-#RAW_DATA_AND_LABELS_DIR = '/mlwell-data2/dafna/PD_data_and_labels/Data'
-#PD_RAW_LABELS_DIR = '/mlwell-data2/dafna/PD_data_and_labels/labels'
-#RAW_DATA_AND_LABELS_DIR = '/mlwell-data2/dafna/daily_living_data_array/PACE'
-PROCESSED_DATA_DIR ='/mlwell-data2/dafna/daily_living_data_array/data_ready'
-OUTPUT_DIR = '/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs'
-VIZUALIZE_DIR = '/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/results_visualization/multiclass_hd_only/multiclass_separated_labels'
+VIZUALIZE_DIR = os.path.join(
+    OUTPUT_DIR,
+    'results_visualization/multiclass_hd_only/multiclass_separated_labels'
+)
 if args.cohort == 'pd_owly':
     SRC_SAMPLE_RATE = int(25) #hz
 else:
