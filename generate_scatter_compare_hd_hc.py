@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import ipdb
 import numpy as np
+import os
+from paths import OUTPUT_DIR
 from scipy import stats
 import os
 
@@ -64,13 +66,15 @@ def correlation_plot(x, y, filename):
     plt.close()
 def main():
     # Parse arguments
-    seg_hc_csv_file_name = '/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/results_visualization/boosting/daily_living_seg_triple_wind_no_std_per_day_segmentation_hc/walking_precent.csv'
-    seg_hd_csv_file_name = '/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/results_visualization/boosting/daily_living_seg_triple_wind_no_std_per_day_segmentation_hd/walking_precent.csv'
-    class_hc_csv_file_name = '/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/results_visualization/boosting/daily_living_classification_no_std_per_day_classification_hc/walking_precent.csv'
-    class_hd_csv_file_name = '/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/results_visualization/boosting/daily_living_classification_no_std_per_day_classification_hd/walking_precent.csv'
-    output_file_name = '/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/final_graphs/daily_living/compare_methods_HD_and_HC_scatter.png'
-    tms_walking_time_corr_file_name = '/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/final_graphs/daily_living/tms_walking_time_corr.png'
-    chorea_box_plot_walking_time_corr_file_name = '/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/final_graphs/daily_living/chorea_box_plot_walking_time_corr_sns.png'
+    base_boost = os.path.join(OUTPUT_DIR, 'results_visualization/boosting')
+    seg_hc_csv_file_name = os.path.join(base_boost, 'daily_living_seg_triple_wind_no_std_per_day_segmentation_hc/walking_precent.csv')
+    seg_hd_csv_file_name = os.path.join(base_boost, 'daily_living_seg_triple_wind_no_std_per_day_segmentation_hd/walking_precent.csv')
+    class_hc_csv_file_name = os.path.join(base_boost, 'daily_living_classification_no_std_per_day_classification_hc/walking_precent.csv')
+    class_hd_csv_file_name = os.path.join(base_boost, 'daily_living_classification_no_std_per_day_classification_hd/walking_precent.csv')
+    daily_graphs = os.path.join(OUTPUT_DIR, 'final_graphs/daily_living')
+    output_file_name = os.path.join(daily_graphs, 'compare_methods_HD_and_HC_scatter.png')
+    tms_walking_time_corr_file_name = os.path.join(daily_graphs, 'tms_walking_time_corr.png')
+    chorea_box_plot_walking_time_corr_file_name = os.path.join(daily_graphs, 'chorea_box_plot_walking_time_corr_sns.png')
     tms = np.array([43,	-1,	30,	60,	44,	63,	62,	12,	32,	31,	34,	55,	10,	10,	33,	41,	68,	45,	42,	52])
     chorea_arm_score = np.array([2,3,2,3,2,3,2,1,2,1,2,2,0,0,2,1,3,3,3,3])
     valid_tms_indices = np.where(tms>0)[0].astype(int)

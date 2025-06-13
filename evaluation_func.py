@@ -1,3 +1,5 @@
+from paths import OUTPUT_DIR
+
 def confusion_matrix(labels, predictions, prefix1='', prefix2='', output_dir=None):
     if len(labels) == 0:
         return
@@ -190,19 +192,19 @@ def _update_dict_res(res_dict, key, labels, prob):
                      }
 
     def update_scores_file(scores_file, new_config_name, new_scores):
-    try:
-        # Load existing scores from file
-        with open(scores_file, 'r') as f:
-            existing_scores = json.load(f)
-    except FileNotFoundError:
-        existing_scores = {}
+        try:
+            # Load existing scores from file
+            with open(scores_file, 'r') as f:
+                existing_scores = json.load(f)
+        except FileNotFoundError:
+            existing_scores = {}
 
-    # Update existing scores with new configuration
-    existing_scores[new_config_name] = new_scores
+        # Update existing scores with new configuration
+        existing_scores[new_config_name] = new_scores
 
-    # Save updated scores back to the file
-    with open(scores_file, 'w') as f:
-        json.dump(existing_scores, f, indent=4)
+        # Save updated scores back to the file
+        with open(scores_file, 'w') as f:
+            json.dump(existing_scores, f, indent=4)
 
 def find_optimal_threshold_roc(pred_probs, true_labels,subject_name,plot_roc=False,output_dir=None):
     fpr, tpr, thresholds = roc_curve(true_labels, pred_probs)
@@ -230,10 +232,13 @@ def find_optimal_threshold_roc(pred_probs, true_labels,subject_name,plot_roc=Fal
 def plot_curves(labels, probs):
     fpr, tpr, _ = metrics.roc_curve(labels, probs)
     precision, recall, _ = metrics.precision_recall_curve(labels, probs)
-    np.save(os.path.join('/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/final_graphs/pd_curves',f'fpr_{OUT_PREFIX}.npy'),fpr)
-    np.save(os.path.join('/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/final_graphs/pd_curves',f'tpr_{OUT_PREFIX}.npy'),tpr)
-    np.save(os.path.join('/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/final_graphs/pd_curves',f'precision_{OUT_PREFIX}.npy'),precision)
-    np.save(os.path.join('/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/final_graphs/pd_curves',f'recall_{OUT_PREFIX}.npy'),recall)
+    curves_dir = os.path.join(OUTPUT_DIR, 'final_graphs/pd_curves')
+    if not os.path.exists(curves_dir):
+        os.makedirs(curves_dir)
+    np.save(os.path.join(curves_dir, f'fpr_{OUT_PREFIX}.npy'), fpr)
+    np.save(os.path.join(curves_dir, f'tpr_{OUT_PREFIX}.npy'), tpr)
+    np.save(os.path.join(curves_dir, f'precision_{OUT_PREFIX}.npy'), precision)
+    np.save(os.path.join(curves_dir, f'recall_{OUT_PREFIX}.npy'), recall)
 
     ipdb.set_trace()
     plt.figure()

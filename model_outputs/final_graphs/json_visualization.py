@@ -3,11 +3,12 @@ import numpy as np
 import json
 import os
 import ipdb
+from paths import OUTPUT_DIR
 
 plt.rcParams.update({'font.size': 12})
 
-JSON_FILE = '/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/scores.json'
-OUT_PATH = '/home/dafnas1/my_repo/hd_gait_detection_with_SSL/model_outputs/final_graphs'
+JSON_FILE = os.path.join(OUTPUT_DIR, 'scores.json')
+OUT_PATH = os.path.join(OUTPUT_DIR, 'final_graphs')
 NUM_CHOREA_CLASS = 5
 
 def main():

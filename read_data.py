@@ -4,22 +4,23 @@ import numpy as np
 import pandas as pd
 import csv
 import ipdb
+from paths import RAW_DATA_AND_LABELS_DIR, PROCESSED_DATA_DIR
 
-SYNC_FILE_NAME = '/home/dafnas1/datasets/hd_dataset/lab_geneactive/sync_params.xlsx'
-WS_SYNC_FILE_NAME = '/home/dafnas1/datasets/hd_dataset/lab_geneactive/ws_sync_params.xlsx'
+SYNC_FILE_NAME = os.path.join(RAW_DATA_AND_LABELS_DIR, 'sync_params.xlsx')
+WS_SYNC_FILE_NAME = os.path.join(RAW_DATA_AND_LABELS_DIR, 'ws_sync_params.xlsx')
 KEY_COLUMN = 'video name'
 VALUE_COLUMNS = ['video 2m walk start time (seconds)', 'sensor 2m walk start time (seconds)','FPS']
 SYNC_SHEET_NAME = 'Sheet1'
 
-ACC_DATA_DIR = '/home/dafnas1/datasets/hd_dataset/lab_geneactive/acc_data/right_wrist'
-WS_ACC_DATA_DIR = '/home/dafnas1/datasets/hd_dataset/lab_geneactive/acc_data/WS_acc_files'
-LABEL_DATA_DIR = '/home/dafnas1/datasets/hd_dataset/lab_geneactive/labeled data'
-OPAL_LABEL_DATA_DIR = '/home/dafnas1/datasets/hd_dataset/lab_geneactive/labeled data/WS_label_files'
-TARGET_DIR = '/home/dafnas1/datasets/hd_dataset/lab_geneactive/synced_labeled_data_walking_non_walking'
-DAILY_DATA_DIR = '/mlwell-data2/dafna/daily_living_for_ssl_gait_detection_paper/HC'
-DAILY_TARGET_DIR = '/mlwell-data2/dafna/daily_living_data_array/HC'
-PACE_DAILY_DATA_DIR ='/mlwell-data2/dafna/PACEHD_for_ssl_paper'
-PACE_DAILY_TARGET_DIR ='/mlwell-data2/dafna/daily_living_data_array/PACE'
+ACC_DATA_DIR = os.path.join(RAW_DATA_AND_LABELS_DIR, 'acc_data/right_wrist')
+WS_ACC_DATA_DIR = os.path.join(RAW_DATA_AND_LABELS_DIR, 'acc_data/WS_acc_files')
+LABEL_DATA_DIR = os.path.join(RAW_DATA_AND_LABELS_DIR, 'labeled data')
+OPAL_LABEL_DATA_DIR = os.path.join(RAW_DATA_AND_LABELS_DIR, 'labeled data/WS_label_files')
+TARGET_DIR = RAW_DATA_AND_LABELS_DIR
+DAILY_DATA_DIR = os.path.join(PROCESSED_DATA_DIR, 'daily_living_for_ssl_gait_detection_paper/HC')
+DAILY_TARGET_DIR = os.path.join(PROCESSED_DATA_DIR, 'HC')
+PACE_DAILY_DATA_DIR = os.path.join(PROCESSED_DATA_DIR, 'PACEHD_for_ssl_paper')
+PACE_DAILY_TARGET_DIR = os.path.join(PROCESSED_DATA_DIR, 'PACE')
 ACC_SAMPLE_RATE = 100 # Hz
 #LABEL_SAMPLE_RATE = 59.94005994005994 # for movies from TC center 60 FPS
 missing_labels = []
