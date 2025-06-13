@@ -36,9 +36,45 @@ python train_hd_ssl.py --initialize-model --training-mode --run-suffix "experime
 Default directories for raw data, processed data, model outputs and checkpoints
 are defined in `paths.py`. These values point to `/content/...` so the code runs
 out of the box in Google Colab. To override any of the locations on your local
-machine, either edit `paths.py` or set the environment variables
-`RAW_DATA_AND_LABELS_DIR`, `PROCESSED_DATA_DIR`, `OUTPUT_DIR` and
-`CHECKPOINT_PATH` before running the scripts:
+machine, either edit `paths.py` or set the environment variables listed below
+before running the scripts. `paths.py` verifies that each directory exists when
+it is imported and will raise a clear error if any of them are missing.
+
+Required variables:
+
+- `RAW_DATA_AND_LABELS_DIR` – root directory containing the raw sensor files and
+  labels.
+- `PROCESSED_DATA_DIR` – location of intermediate processed data.
+- `OUTPUT_DIR` – where models and results are written.
+- `CHECKPOINT_PATH` – path to a model checkpoint file.
+
+Additional optional variables used by `read_data.py` allow overriding specific
+sub‑folders:
+
+- `ACC_DATA_DIR`
+- `WS_ACC_DATA_DIR`
+- `LABEL_DATA_DIR`
+- `OPAL_LABEL_DATA_DIR`
+- `DAILY_DATA_DIR`
+- `DAILY_TARGET_DIR`
+- `PACE_DAILY_DATA_DIR`
+- `PACE_DAILY_TARGET_DIR`
+
+The expected folder tree is:
+
+```
+$RAW_DATA_AND_LABELS_DIR/
+    acc_data/right_wrist/
+    acc_data/WS_acc_files/
+    labeled data/
+        WS_label_files/
+$PROCESSED_DATA_DIR/
+    daily_living_for_ssl_gait_detection_paper/HC/
+    HC/
+    PACEHD_for_ssl_paper/
+    PACE/
+```
+These names can be customised via the variables above.
 
 ```bash
 export RAW_DATA_AND_LABELS_DIR=/path/to/raw
